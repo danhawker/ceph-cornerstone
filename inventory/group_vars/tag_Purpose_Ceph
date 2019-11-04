@@ -1,0 +1,6 @@
+---
+# Vars for AWS tag Purpose:Ceph
+ansible_user: ec2-user
+ansible_become: yes
+ansible_become_user: root
+ansible_ssh_private_key_file: ~/.ssh/dhawker_AWS_RedHat.pem

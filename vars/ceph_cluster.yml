@@ -1,0 +1,169 @@
+---
+#
+# -----------------------------------------------------------------------------
+# Define Ceph Cluster Topology using Cornerstone
+# -----------------------------------------------------------------------------
+#
+
+# Note the below definition is a bit overloaded, and ought to drag in
+# variables from defaults, but the loop currently tramples on that. 
+# Need to refactor.
+guests:
+  mon0:
+    cornerstone_vm_name: mon0
+    cornerstone_tag_role: "CephMON"
+    cornerstone_vm_flavour: t3a.micro
+    cornerstone_vm_aws_ami: ami-013e64f2d9f3c2bc7  # RHEL7.7
+    cornerstone_vm_aws_sg: "cephworkshop-sg"
+    cornerstone_platform: aws
+    cornerstone_location: eu-west-2
+    cornerstone_vm_aws_az: eu-west-2a
+    cornerstone_prefix: cephws
+    cornerstone_tag_purpose: "Ceph"
+    cornerstone_vm_data_disk: false
+    cornerstone_vm_state: present
+    cornerstone_vm_os_disk_size: 10
+    cornerstone_vm_assign_public_ip: true
+    cornerstone_public_private_ip: public
+  rgw0:
+    cornerstone_vm_name: rgw0
+    cornerstone_tag_role: "CephRGW"
+    cornerstone_vm_flavour: t3a.micro
+    cornerstone_vm_aws_ami: ami-013e64f2d9f3c2bc7  # RHEL7.7
+    cornerstone_vm_aws_sg: "cephworkshop-sg"
+    cornerstone_platform: aws
+    cornerstone_location: eu-west-2
+    cornerstone_vm_aws_az: eu-west-2b
+    cornerstone_prefix: cephws
+    cornerstone_tag_purpose: "Ceph"
+    cornerstone_vm_data_disk: false
+    cornerstone_vm_state: present
+    cornerstone_vm_os_disk_size: 10
+    cornerstone_vm_assign_public_ip: true
+    cornerstone_public_private_ip: public
+  rgw1:
+    cornerstone_vm_name: rgw1
+    cornerstone_tag_role: "CephRGW"
+    cornerstone_vm_flavour: t3a.micro
+    cornerstone_vm_aws_ami: ami-013e64f2d9f3c2bc7  # RHEL7.7
+    cornerstone_vm_aws_sg: "cephworkshop-sg"
+    cornerstone_platform: aws
+    cornerstone_location: eu-west-2
+    cornerstone_vm_aws_az: eu-west-2c
+    cornerstone_prefix: cephws
+    cornerstone_tag_purpose: "Ceph"
+    cornerstone_vm_data_disk: false
+    cornerstone_vm_state: present
+    cornerstone_vm_os_disk_size: 10
+    cornerstone_vm_assign_public_ip: true
+    cornerstone_public_private_ip: public
+  mgr0:
+    cornerstone_vm_name: mgr0
+    cornerstone_tag_role: "CephMGR"
+    cornerstone_vm_flavour: t3a.micro
+    cornerstone_vm_aws_ami: ami-013e64f2d9f3c2bc7  # RHEL7.7
+    cornerstone_vm_aws_sg: "cephworkshop-sg"
+    cornerstone_platform: aws
+    cornerstone_location: eu-west-2
+    cornerstone_vm_aws_az: eu-west-2a
+    cornerstone_prefix: cephws
+    cornerstone_tag_purpose: "Ceph"
+    cornerstone_vm_data_disk: false
+    cornerstone_vm_state: present
+    cornerstone_vm_os_disk_size: 10
+    cornerstone_vm_assign_public_ip: true
+    cornerstone_public_private_ip: public
+  osd0:
+    cornerstone_vm_name: osd0
+    cornerstone_tag_role: "CephOSD"
+    cornerstone_vm_flavour: t3a.micro
+    cornerstone_vm_aws_ami: ami-013e64f2d9f3c2bc7  # RHEL7.7
+    cornerstone_vm_aws_sg: "cephworkshop-sg"
+    cornerstone_platform: aws
+    cornerstone_location: eu-west-2
+    cornerstone_vm_aws_az: eu-west-2b
+    cornerstone_prefix: cephws
+    cornerstone_tag_purpose: "Ceph"
+    cornerstone_vm_data_disk: true
+    cornerstone_vm_data_disk_size: "15"
+    cornerstone_vm_data_disk_device_name: "/dev/sdb"
+    cornerstone_vm_state: present
+    cornerstone_vm_os_disk_size: 10
+    cornerstone_vm_assign_public_ip: true
+    cornerstone_public_private_ip: public
+  osd1:
+    cornerstone_vm_name: osd1
+    cornerstone_tag_role: "CephOSD"
+    cornerstone_vm_flavour: t3a.micro
+    cornerstone_vm_aws_ami: ami-013e64f2d9f3c2bc7  # RHEL7.7
+    cornerstone_vm_aws_sg: "cephworkshop-sg"
+    cornerstone_platform: aws
+    cornerstone_location: eu-west-2
+    cornerstone_vm_aws_az: eu-west-2c
+    cornerstone_prefix: cephws
+    cornerstone_tag_purpose: "Ceph"
+    cornerstone_vm_data_disk: true
+    cornerstone_vm_data_disk_size: "15"
+    cornerstone_vm_data_disk_device_name: "/dev/sdb"
+    cornerstone_vm_state: present
+    cornerstone_vm_os_disk_size: 10
+    cornerstone_vm_assign_public_ip: true
+    cornerstone_public_private_ip: public
+  osd2:
+    cornerstone_vm_name: osd2
+    cornerstone_tag_role: "CephOSD"
+    cornerstone_vm_flavour: t3a.micro
+    cornerstone_vm_aws_ami: ami-013e64f2d9f3c2bc7  # RHEL7.7
+    cornerstone_vm_aws_sg: "cephworkshop-sg"
+    cornerstone_platform: aws
+    cornerstone_location: eu-west-2
+    cornerstone_vm_aws_az: eu-west-2a
+    cornerstone_prefix: cephws
+    cornerstone_tag_purpose: "Ceph"
+    cornerstone_vm_data_disk: true
+    cornerstone_vm_data_disk_size: "15"
+    cornerstone_vm_data_disk_device_name: "/dev/sdb"
+    cornerstone_vm_state: present
+    cornerstone_vm_os_disk_size: 10
+    cornerstone_vm_assign_public_ip: true
+    cornerstone_public_private_ip: public
+  client0:
+    cornerstone_vm_name: client0
+    cornerstone_tag_role: "CephClient"
+    cornerstone_vm_flavour: t3a.micro
+    cornerstone_vm_aws_ami: ami-013e64f2d9f3c2bc7  # RHEL7.7
+    cornerstone_vm_aws_sg: "cephworkshop-sg"
+    cornerstone_platform: aws
+    cornerstone_location: eu-west-2
+    cornerstone_vm_aws_az: eu-west-2b
+    cornerstone_prefix: cephws
+    cornerstone_tag_purpose: "Ceph"
+    cornerstone_vm_data_disk: false
+    cornerstone_vm_state: present
+    cornerstone_vm_os_disk_size: 10
+    cornerstone_vm_assign_public_ip: true
+    cornerstone_public_private_ip: public
+
+cornerstone_sg:
+- name: "cephworkshop-sg"
+  description: Ceph Security Group in AWS
+  region: "{{ cornerstone_location }}"
+  rules:
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        group_name: ""
+        cidr_ip: 0.0.0.0/0
+        rule_desc: "allowSSHin_all"
+      - proto: tcp
+        from_port: 443
+        to_port: 443
+        group_name: ""
+        cidr_ip: 0.0.0.0/0
+        rule_desc: "allowHttpsin_all"
+      - proto: all
+        from_port: ""
+        to_port: ""
+        group_name: "cephworkshop-sg"
+        cidr_ip: 0.0.0.0/0
+        rule_desc: "allowAllfromSelf"

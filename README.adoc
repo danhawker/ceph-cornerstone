@@ -1,2 +1,68 @@
 == ceph-cornerstone
-Ceph Deployment using ceph-ansible and Cornerstone
+Automated Ceph Deployment using ceph-ansible and Cornerstone
+
+This repo contains a series of Ansible playbooks and roles, that enable the automated deployment of a Ceph cluster on AWS. It leverages existing mechanisms as far as possible, however some fettling is required to make the solution work within AWS without having to setup virtual machines beforehand.
+
+=== Topology
+
+Ceph has a number of components and the `deploy_ceph_vms.yml` playbook creates 8x VMs to facilitate this. The following describes these nodes.
+
+* mon0 - 1x monitor node
+* mgr0 - 1x manager node
+* client0 - 1x client node
+* rgw0, rgw1 - 2x Rados Gateway nodes
+* osd0, osd1, osd3 - 3x Object Storage nodes
+
+You can adjust the number of nodes to suit your requirements, but the above is the recommended minimum for a real world, but not production, deployment. `ceph-ansible` supports further topology variations, but this repo has bit been tested with these.
+
+This deployment utilises `t3a.micro` instances. Again, adjust to fit your requirements.
+
+NOTE: Each OSD node requires an additional storage device for Ceph to use for data storage. Cornerstone can (and does by default) attach and configure this data disk for you. Be aware that different AWS instances, expose different block devices to the kernel, so if not using the same AWS flavour I have, ensure you change the OSD device definition in `inventory/group_vars/tag_Role_CephOSD` accordingly.
+
+=== Dependencies
+
+Ensure you create a python virtualenv to run these tasks. The `ceph-ansible` code leveraged, is *exclusively* compatible with Ansible 2.6, so newer Ansible versions will fail.
+
+I use `virtualenvwrapper` to manage my python venvs, and use it below. If not using virtualenvwrapper, adjust the commands to suit.
+
+This repo includes *all* required playbooks, roles and libraries. There are one or two _tactical hacks_ that are employed to ensure it all deploys successfully on AWS. Later versions of this repo will remove these.
+
+=== Setup
+
+.Clone this repo
+
+$ git clone https://github.com/danhawker/ceph-cornerstone
+
+.Create Virtualenv of the repo
+$ mkvirtualenv -a ceph-cornerstone ceph-cornerstone
+
+.Pip Install Required Tools in the venv
+(ceph-cornerstone) $ pip install ansible>=2.6,<2.7 boto boto3 notario netaddr 
+
+=== Vars and Group Vars
+
+`ceph-ansible` uses a series of `group_vars` to ensure each type of node has the correct configuration applied to it.
+
+This repo extends this method, with Ceph roles assigned to Tags within AWS, which are attached to the individual instances by Cornerstone. As an example, when provisioning OSD's, Cornerstone attaches the `Role:CephOSD` tag to each instance.
+
+Each Role is defined within `inventory/group_vars` and is in the AWS form of `tag_<tag_name>_<tag_value>`. So instances with the tag `Role:CephOSD`, use the `group_vars` file `tag_Role_CephOSD`.
+
+Adjust each role as required to fit your deployment.
+
+Similarly, within `vars` there are a number of base vars that must be verified and/or ammended to fit your environment and deployment.
+
+* `vars/ceph_cluster.yml` - this is the base Ceph cluster topology map that Cornerstone will provision. Edit the configuration of the instances you wish to provision here.
+* `vars/cornerstone_provider.yml` - this is an ansible-vault'ed file containing required information used by the Cornerstone provider to provision hosts (eg AWS profile, keys, etc.)
+* `vars/rhsm.yml` - this is an ansible-vault'ed file containing required credential information for `ceph-ansible` to register the nodes with the Red Hat Subscription Management Service.
+
+=== Usage
+
+.Spin up the VMs
+
+$ ansible-playbook -e @vars/cornerstone_provider.yml -e @vars/ceph_cluster.yml playbooks/deploy_ceph_vms.yml --ask-vault-pass
+
+.Deploy Ceph
+$ ansible-playbook -i inventory/ec2.py -e @vars/cornerstone_provider.yml -e @vars/ceph_cluster.yml -e@vars/rhsm.yml playbooks/deploy_ceph_sw.yml --ask-vault-pass
+
+The deploy can take a while (around 30mins), so go get a coffee.
+

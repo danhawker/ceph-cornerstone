@@ -1,0 +1,13 @@
+---
+- name: Create Ceph VMs
+  hosts: localhost
+  vars:
+    # Override boto_profile for use in ec2.ini
+    boto_profile: "{{ cornerstone_aws_profile }}"
+
+    cornerstone_platform: aws
+    cornerstone_location: eu-west-2
+    cornerstone_prefix: cephws
+
+  roles:
+    - role: cornerstone

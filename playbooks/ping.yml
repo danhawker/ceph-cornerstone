@@ -1,0 +1,8 @@
+---
+# Quick playbook to Ping Hosts
+- name: Ping Hosts Example
+  hosts: tag_Purpose_Ceph
+  gather_facts: yes
+  tasks:
+  - name: Ping Host
+    ping:
